@@ -1,5 +1,5 @@
 # MineNav
-3D Terrain navigator for Minecraft
+3D Terrain navigation for Minecraft
 
 ```
 WIP
