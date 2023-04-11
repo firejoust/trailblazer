@@ -1,6 +1,8 @@
-const Movement = require("./src/movement/movement")
-const Pathfinder = require("./src/pathfinder")
-const Traversal = require("./src/traversal")
+const Goals = require("./src/goals")
+
+const Movement = require("./src/components/movement")
+const Pathfinder = require("./src/components/pathfinder")
+const Traversal = require("./src/components/traversal")
 
 const Assert = require("assert")
 
@@ -11,7 +13,7 @@ const Setter = (instance, callback) => {
     }
 }
 
-module.exports.inject = function inject(bot) {
+module.exports.plugin = function inject(bot) {
     const movement = require("mineflayer-movement").plugin
     const pathfinder = require("mineflayer-pathfinder-lite").plugin
 
@@ -25,7 +27,12 @@ function Plugin(bot) {
     const pathfinder = Pathfinder.inject(bot, Setter)
     const traversal = Traversal.inject(bot, Setter)
 
+    this.hazards = bot.pathfinder.hazards
+
+    let _callback = () => {}
     let _reject = () => {}
+    let _interval = null
+
     let _goal = null
     let _hazards = null
 
@@ -55,9 +62,10 @@ function Plugin(bot) {
         }
     }
 
-    const callback = resolve => {
+    function callback(resolve) {
         if (_goal.complete(bot.entity.position.floored())) {
             resolve()
+            stop("Operation has finished")
         } else {
             tick()
         }
@@ -68,23 +76,32 @@ function Plugin(bot) {
         // create a path to the goal
         return new Promise((resolve, reject) => {
             _reject = reject
-            bot.on("physicsTick", () => callback(resolve))
+            _callback =  () => callback(resolve)
+            bot.on("physicsTick", _callback)
         })
     }
 
     function stop(reason) {
+        // reject pending operations
         _reject(reason || "The operation was stopped manually")
         _reject = () => {}
-        // remove listener
-        bot.off("physicsTick", callback)
+        // remove listener and reset callback
+        bot.off("physicsTick", _callback)
+        _callback = () => {}
+        // clear control states
+        bot.clearControlStates()
+        pathfinder.reset()
     }
 
     function getYaw() {
         Assert.ok(_goal, "No goals have been set")
+        const destination = _goal.destination()
         const path = pathfinder.getPath(_goal, _hazards)
-        const nextPos = traversal.getNextPos(path)
-        const yaw = movement.getYaw(nextPos)
-        return yaw
+        const position = traversal.nextNode(path, destination)
+        if (position)
+            bot.chat(`/particle flame ${position.x} ${position.y} ${position.z}`)
+
+        return movement.getYaw(position, destination)
     }
 
     function getControls(yaw) {
@@ -101,8 +118,8 @@ function Plugin(bot) {
         }
 
         // steer towards the next node
-        return bot.look(yaw, bot.entity.pitch, true)
+        bot.look(yaw, bot.entity.pitch, true)
     }
 }
 
-module.exports.goals = require("mineflayer-pathfinder-lite").goals
+module.exports.goals = Goals()
