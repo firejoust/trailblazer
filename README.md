@@ -1,4 +1,4 @@
-Combining the two of best worlds?!?!
+Combining the best of both worlds?!??!?!
 ```
 WIP
 High level API for navigating Minecraft's terrain
