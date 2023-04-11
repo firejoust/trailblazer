@@ -31,7 +31,6 @@ function Plugin(bot) {
 
     let _callback = () => {}
     let _reject = () => {}
-    let _interval = null
 
     let _goal = null
     let _hazards = null
@@ -98,9 +97,6 @@ function Plugin(bot) {
         const destination = _goal.destination()
         const path = pathfinder.getPath(_goal, _hazards)
         const position = traversal.nextNode(path, destination)
-        if (position)
-            bot.chat(`/particle flame ${position.x} ${position.y} ${position.z}`)
-
         return movement.getYaw(position, destination)
     }
 
