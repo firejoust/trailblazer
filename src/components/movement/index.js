@@ -91,22 +91,34 @@ module.exports.inject = function inject(bot, Setter) {
             sprint: bot.controlState["sprint"] || jumpSprint,
         }
 
-        const status = new bot.physics.Simulation(bot.entity)
-            .until(state => getJumpConditions(state))
+        const status = {
+            shouldJump: false
+        }
+
+        new bot.physics.Simulation(bot.entity)
+            .until(state => getJumpConditions(state, status))
             .ticks(20)
             .yaw(yaw)
             .controls(states)
             .execute()
 
-        states["jump"] = status || bot.entity.isInWater || bot.entity.isInLava
+        states["jump"] = status.shouldJump || bot.entity.isInWater || bot.entity.isInLava
         return states
     }
 
-    function getJumpConditions(state) {
+    function getJumpConditions(state, status) {
+        const difference = state.pos.y - bot.entity.position.y
+
         if (jumpSprint) {
-            return state.onGround && state.pos.y - bot.entity.position.y >= -1
+            if (difference >= -1 && state.onGround) {
+                status.shouldJump = true
+                return true
+            }
         } else {
-            return state.onGround && state.pos.y - bot.entity.position.y > 0
+            if (difference > 0 && state.onGround) {
+                status.shouldJump = true
+                return true
+            }
         }
     }
 
