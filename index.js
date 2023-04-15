@@ -73,7 +73,7 @@ function Plugin(bot) {
     function callback(resolve) {
         if (_goal.complete(bot.entity.position)) {
             resolve()
-            stop("Operation has finished")
+            stop("Goal was completed in another operation (only one instance allowed simultaneously)")
         } else {
             tick()
         }
