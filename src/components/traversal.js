@@ -1,39 +1,67 @@
 const defaults = {
-    minimumNodes: 3,
-    radiusXZ: 1.5,
-    radiusY: 0,
+    prevision: 5,
+    radiusXZ: 2,
+    radiusAscent: 0.1,
+    radiusDescent: 10
 }
 
 module.exports.inject = function inject(bot, Setter) {
     let {
-        minimumNodes,
+        prevision,
         radiusXZ,
-        radiusY
+        radiusAscent,
+        radiusDescent
     } = defaults
 
     function configure() {
-        this.minimumNodes = Setter(this, _ => minimumNodes = _)
+        this.prevision = Setter(this, _ => prevision = _)
         this.radiusXZ = Setter(this, _ => radiusXZ = _)
-        this.radiusY = Setter(this, _ => radiusY = _)
+        this.radiusAscent = Setter(this, _ => radiusAscent = _)
+        this.radiusDescent = Setter(this, _ => radiusDescent = _)
+    }
+
+    function withinRadius(x, y, z) {
+        return (Math.sqrt(x ** 2 + z ** 2) <= radiusXZ) && (
+            y < 0
+            ? Math.abs(y) <= radiusDescent
+            : Math.abs(y) <= radiusAscent
+        )
     }
 
     function nextNode(path) {
         // path is too small; switch to steering
-        if (path.length < minimumNodes) {
+        if (path.length < 1) {
             return null
-        } else {
-            const pos = path[0]
-            const x = pos.x - bot.entity.position.x
-            const y = pos.y - bot.entity.position.y
-            const z = pos.z - bot.entity.position.z
+        } else
 
-            if (Math.abs(y) > radiusY) {
-                if (Math.sqrt(x ** 2 + z ** 2) > radiusXZ) {
-                    return pos
+        {
+            const maximum = Math.min(prevision, path.length)
+            let found = false
+            let index = 0
+
+            for (let i = 0; i < maximum; i++) {
+                const x = path[i].x - bot.entity.position.x
+                const y = path[i].y - bot.entity.position.y
+                const z = path[i].z - bot.entity.position.z
+
+                if (withinRadius(x, y, z)) {
+                    found = true
+                    index = i
+                    continue
+                }
+
+                if (found) {
+                    break
                 }
             }
 
-            return path.shift()
+            if (found) {
+                for (let i = 0; i <= index; i++) {
+                    path.shift()
+                }
+            }
+
+            return path[0] || null
         }
     }
 

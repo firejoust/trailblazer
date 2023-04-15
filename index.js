@@ -16,9 +16,18 @@ const Setter = (instance, callback) => {
 module.exports.plugin = function inject(bot) {
     const movement = require("mineflayer-movement").plugin
     const pathfinder = require("mineflayer-pathfinder-lite").plugin
+    const physics = require("mineflayer-physics").plugin
 
     bot.loadPlugin(movement)
     bot.loadPlugin(pathfinder)
+    bot.loadPlugin(physics)
+    
+    // avoid plugin conflicts (load implicitly)
+    bot._pathfinder = bot.pathfinder
+    bot._movement = bot.movement
+    delete bot.pathfinder
+    delete bot.movement
+
     bot.navigate = new Plugin(bot)
 }
 
@@ -27,7 +36,7 @@ function Plugin(bot) {
     const pathfinder = Pathfinder.inject(bot, Setter)
     const traversal = Traversal.inject(bot, Setter)
 
-    this.hazards = bot.pathfinder.hazards
+    this.hazards = bot._pathfinder.hazards
 
     let _callback = () => {}
     let _reject = () => {}
@@ -62,7 +71,7 @@ function Plugin(bot) {
     }
 
     function callback(resolve) {
-        if (_goal.complete(bot.entity.position.floored())) {
+        if (_goal.complete(bot.entity.position)) {
             resolve()
             stop("Operation has finished")
         } else {
@@ -105,16 +114,22 @@ function Plugin(bot) {
     }
 
     function tick() {
-        const yaw = getYaw()
-        const controls = getControls(yaw)
+        if (_goal.complete(bot.entity.position)) {
+            stop("Goal was completed in another operation (only one instance allowed simultaneously)")
+        } else
+        
+        {
+            const yaw = getYaw()
+            const controls = getControls(yaw)
 
-        // set required control states
-        for (let state in controls) {
-            bot.controlState[state] = controls[state]
+            // set required control states
+            for (let state in controls) {
+                bot.controlState[state] = controls[state]
+            }
+
+            // steer towards the next node
+            bot.look(yaw, bot.entity.pitch, true)
         }
-
-        // steer towards the next node
-        bot.look(yaw, bot.entity.pitch, true)
     }
 }
 

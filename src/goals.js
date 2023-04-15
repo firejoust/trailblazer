@@ -16,6 +16,22 @@ module.exports = function Goals() {
         }
     }
 
+    function RadiusCB(callback, radius) {
+        radius = radius || 0
+
+        this.destination = () => {
+            return callback()
+        }
+
+        this.heuristic = (position) => {
+            return position.distanceTo(callback())
+        }
+
+        this.complete = (position) => {
+            return position.distanceTo(callback()) <= radius
+        }
+    }
+
     function Direction(position, yaw, distance, radius) {
         position = position.floored()
         distance = distance || 150
@@ -43,6 +59,7 @@ module.exports = function Goals() {
 
     return {
         Radius,
+        RadiusCB,
         Direction
     }
 }
