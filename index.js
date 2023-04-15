@@ -46,7 +46,7 @@ function Plugin(bot) {
 
     this.setGoal = setGoal
     this.configure = configure
-    this.start = start
+    this.goto = goto
     this.stop = stop
     this.tick = tick
     this.getYaw = getYaw
@@ -79,8 +79,10 @@ function Plugin(bot) {
         }
     }
 
-    async function start() {
+    async function goto(goal, ...hazards) {
         stop("A new operation was started before the last one could finish")
+        setGoal(goal, ...hazards)
+
         // create a path to the goal
         return new Promise((resolve, reject) => {
             _reject = reject
