@@ -28,7 +28,7 @@ module.exports.plugin = function inject(bot) {
     delete bot.pathfinder
     delete bot.movement
 
-    bot.navigate = new Plugin(bot)
+    bot.trailblazer = new Plugin(bot)
 }
 
 function Plugin(bot) {
