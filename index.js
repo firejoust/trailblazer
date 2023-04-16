@@ -107,7 +107,7 @@ function Plugin(bot) {
         Assert.ok(_goal, "No goals have been set")
         const destination = _goal.destination()
         const path = pathfinder.getPath(_goal, _hazards)
-        const position = traversal.nextNode(path, destination)
+        const position = traversal.nextNode(path)
         return movement.getYaw(position, destination)
     }
 
