@@ -3,16 +3,19 @@ const Goals = require("./goals")
 function Defaults(bot) {
     const goals = Goals.inject(bot)
     const { Headless, Ground, Airborne, Swimming, Climbing } = goals
+    
     // mineflayer-movement goals
     this.goalHeadless = Headless
     this.goalGround = Ground
     this.goalAirborne = Airborne
     this.goalSwimming = Swimming
     this.goalClimbing = Climbing
+
     // mineflayer-movement getYaw arguments
     this.fov = 360
     this.rotations = 25
     this.blend = 2
+
     // misc configuration
     this.jumpSprint = false
 }
@@ -108,6 +111,10 @@ module.exports.inject = function inject(bot, Setter) {
 
     function getJumpConditions(state, status) {
         const difference = state.pos.y - bot.entity.position.y
+
+        if (state.isInLava || state.isInWater) {
+            return true
+        }
 
         if (jumpSprint) {
             if (difference >= -1 && state.onGround) {
