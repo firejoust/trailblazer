@@ -1,5 +1,5 @@
 ### About
 #### Features
-- Follow a cheap A* path to get to a destination
-- Switch between A* and steering if a path is restricted
-- Avoid hazards such as blocks, entities, positions
+- Smooth movement towards a goal using A* and steering
+- Automatically changes movement behaviour based on the terrain
+- Avoid hazards such as blocks, entities and coordinates
