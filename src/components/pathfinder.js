@@ -1,5 +1,5 @@
 const defaults = {
-    avoid: ['lava', 'water'],
+    avoid: { 'lava': true, 'water': true },
     depth: 4,
     blocks: 5000,
     interval: 1000,
@@ -24,7 +24,7 @@ module.exports.inject = function inject(bot) {
     const increment = () => counter++
 
     function configure() {
-        this.avoid = Setter(this, (..._) => avoid = _)
+        this.avoid = Setter(this, _ => avoid = _)
         this.depth = Setter(this, _ => depth = _)
         this.blocks = Setter(this, _ => blocks = _)
         this.timeout = Setter(this, _ => timeout = _)
@@ -39,7 +39,7 @@ module.exports.inject = function inject(bot) {
         if (path === null || (counter >= interval && bot.entity.onGround)) {
             counter = 0
             path = new bot._pathfinder.Path(goal, ...hazards)
-                .avoid(...avoid)
+                .avoid(avoid)
                 .depth(depth)
                 .blocks(blocks)
                 .timeout(timeout)
