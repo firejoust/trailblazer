@@ -36,8 +36,6 @@ function Plugin(bot) {
     const pathfinder = Pathfinder.inject(bot, Setter)
     const traversal = Traversal.inject(bot, Setter)
 
-    this.hazards = bot._pathfinder.hazards
-
     let _callback = () => {}
     let _reject = () => {}
 
@@ -138,3 +136,4 @@ function Plugin(bot) {
 }
 
 module.exports.goals = Goals()
+module.exports.hazards = require("mineflayer-pathfinder-lite").hazards
