@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "mineflayer-movement": "^0.4.3",
-    "mineflayer-pathfinder-lite": "^1.0.2",
+    "mineflayer-pathfinder-lite": "^1.0.3",
     "mineflayer-physics": "^0.0.9"
   }
 }
