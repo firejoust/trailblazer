@@ -95,9 +95,11 @@ function Plugin(bot) {
         // reject pending operations
         _reject(reason || "The operation was stopped manually")
         _reject = () => {}
+        
         // remove listener and reset callback
         bot.off("physicsTick", _callback)
         _callback = () => {}
+
         // clear control states
         bot.clearControlStates()
         pathfinder.reset()
