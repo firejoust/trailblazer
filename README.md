@@ -112,6 +112,7 @@ const instance = bot.trailblazer.configure('movement' | 'pathfinder' | 'traversa
 // instance.[etc...]
 ```
 (Movement)
+- Changes movement behaviour whilst moving between nodes
 - Refer to [mineflayer-movement](https://github.com/firejoust/mineflayer-movement) README for more information
 ```js
 bot.trailblazer.configure('movement')
@@ -126,6 +127,7 @@ bot.trailblazer.configure('movement')
   .goalClimbing(MovementGoal)
 ```
 (Pathfinder)
+- Configures the path that the player will take to get to the destination
 - Refer to [mineflayer-pathfinder-lite](https://github.com/firejoust/mineflayer-pathfinder-lite) README for more information
 ```js
 bot.trailblazer.configure('pathfinder')
@@ -136,6 +138,7 @@ bot.trailblazer.configure('pathfinder')
   .minimumNodes(number)
 ```
 (Traversal)
+- Modifies the requirements needed to get to the next node
 ```js
 bot.trailblazer.configure('traversal')
   .prevision(number)
