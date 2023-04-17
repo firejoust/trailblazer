@@ -3,5 +3,27 @@
     "mineflayer-movement": "^0.4.3",
     "mineflayer-pathfinder-lite": "^1.0.4",
     "mineflayer-physics": "^0.0.9"
-  }
+  },
+  "devDependencies": {
+    "mineflayer": "^4.8.1",
+    "vec3": "^0.1.8"
+  },
+  "types": "./index.d.ts",
+  "name": "trailblazer",
+  "description": "- Smooth movement towards a goal using A* and steering - Automatically changes movement behaviour based on the terrain - Avoid hazards such as blocks, entities and coordinates",
+  "version": "0.0.1",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/firejoust/trailblazer.git"
+  },
+  "author": "firejoust",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/firejoust/trailblazer/issues"
+  },
+  "homepage": "https://github.com/firejoust/trailblazer#readme"
 }
