@@ -80,7 +80,7 @@ declare interface Plugin {
     stop: (reason?: string) => void
     tick: () => void
     getYaw: () => number
-    getControls: () => ControlStateStatus
+    getControls: (yaw: number) => ControlStateStatus
 }
 
 declare module "mineflayer" {
