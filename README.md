@@ -28,7 +28,7 @@ bot.trailblazer.getControls()
 bot.trailblazer.configure(category)
 ```
 (Getting from A to B)
-- Promise based approach: (example)
+- Promise based approach:
 ```js
 bot.once("spawn", async function init() {
   await bot.trailblazer.goto(goal, ...hazards?)
@@ -102,7 +102,17 @@ new Position(weight?, radius?, coordinates?)
   .coordinates(Vec3[])
 ```
 #### Configuration
+- Three primary modules make up the navigation algorithm, being movement, pathfinding, and traversal
+- Each module is configurable using a dynamic builder instance created with the `configure` function
+- It is recommended to keep one configuration instance (per module) during the lifetime of your program.
+
+(API Reference)
+```js
+const instance = bot.trailblazer.configure('movement' | 'pathfinder' | 'traversal')
+// instance.[etc...]
+```
 (Movement)
+- Refer to [mineflayer-movement](https://github.com/firejoust/mineflayer-movement) README for more information
 ```js
 bot.trailblazer.configure('movement')
   .jumpSprint(boolean)
@@ -116,11 +126,22 @@ bot.trailblazer.configure('movement')
   .goalClimbing(MovementGoal)
 ```
 (Pathfinder)
+- Refer to [mineflayer-pathfinder-lite](https://github.com/firejoust/mineflayer-pathfinder-lite) README for more information
 ```js
-
+bot.trailblazer.configure('pathfinder')
+  .avoid(Object)
+  .depth(number)
+  .blocks(number)
+  .timeout(number)
+  .minimumNodes(number)
 ```
 (Traversal)
 ```js
+bot.trailblazer.configure('traversal')
+  .prevision(number)
+  .radiusXZ(number)
+  .radiusAscent(number)
+  .radiusDescent(number)
 ```
 #### Examples
 ```js
