@@ -1,3 +1,11 @@
+<div align="center">
+  <h1>Trailblazer</h1>
+  <body>
+  <img src="https://img.shields.io/npm/v/mineflayer-trailblazer?style=flat-square">
+  <img src="https://img.shields.io/github/issues-pr/firejoust/trailblazer?style=flat-square">
+  <img src="https://img.shields.io/github/issues/firejoust/trailblazer?style=flat-square">
+  </body>
+</div>
 ### About
 #### Features
 - Smooth movement towards a goal using A* and steering
