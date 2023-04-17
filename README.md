@@ -7,7 +7,7 @@
 #### Installation
 - Install the plugin into your project folder using NPM:
 ```sh
-npm install trailblazer
+npm install mineflayer-trailblazer
 ```
 ### API
 #### Methods
