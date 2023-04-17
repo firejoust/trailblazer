@@ -30,29 +30,30 @@ export interface hazards {
 
 declare namespace Configurable {
     interface Movement {
-        goalHeadless: (goal: MovementGoal) => void
-        goalGround: (goal: MovementGoal) => void
-        goalAirborne: (goal: MovementGoal) => void
-        goalSwimming: (goal: MovementGoal) => void
-        goalClimbing: (goal: MovementGoal) => void
-        fov: (fov: number) => void
-        rotations: (rotations: number) => void
-        blend: (blend: number) => void
+        jumpSprint: (jumpSprint: boolean) => this
+        fov: (fov: number) => this
+        rotations: (rotations: number) => this
+        blend: (blend: number) => this
+        goalHeadless: (goal: MovementGoal) => this
+        goalGround: (goal: MovementGoal) => this
+        goalAirborne: (goal: MovementGoal) => this
+        goalSwimming: (goal: MovementGoal) => this
+        goalClimbing: (goal: MovementGoal) => this
     }
 
     interface Pathfinder {
-        avoid: (avoid: AvoidBlocks) => void
-        depth: (depth: number) => void
-        blocks: (blocks: number) => void
-        timeout: (timeout: number) => void
-        minimumNodes: (minimumNodes: number) => void
+        avoid: (avoid: AvoidBlocks) => this
+        depth: (depth: number) => this
+        blocks: (blocks: number) => this
+        timeout: (timeout: number) => this
+        minimumNodes: (minimumNodes: number) => this
     }
 
     interface Traversal {
-        prevision: (prevision: number) => void
-        radiusXZ: (radiusXZ: number) => void
-        radiusAscent: (radiusAscent: number) => void
-        radiusDescent: (radiusDescent: number) => void
+        prevision: (prevision: number) => this
+        radiusXZ: (radiusXZ: number) => this
+        radiusAscent: (radiusAscent: number) => this
+        radiusDescent: (radiusDescent: number) => this
     }
 }
 
