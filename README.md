@@ -1,7 +1,7 @@
 ### About
 #### Features
 - Smooth movement towards a goal using A* and steering
-- Dynamic movement profiles change based on the terrain
+- Movement profiles that change based on the terrain
 - Avoid hazards such as blocks, entities and coordinates
 ### Usage
 #### Installation
