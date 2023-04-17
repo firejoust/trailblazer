@@ -9,8 +9,69 @@
 ```sh
 npm install trailblazer
 ```
-#### API
-##### Example
+### API
+#### Methods
+(Getting from A to B)
+- Promise based approach: (example)
+```js
+bot.once("spawn", async function init() {
+  await bot.trailblazer.goto(goal, ...hazards?)
+  bot.chat("Arrived at goal")
+})
+```
+- Tick/loop based approach:
+```js
+bot.on("physicsTick", function tick() {
+  bot.trailblazer.setGoal(goal, ...hazards?)
+  bot.trailblazer.tick()
+})
+```
+(Miscellaneous)
+```js
+bot.trailblazer.stop(reason?)
+
+bot.trailblazer.getYaw()
+
+bot.trailblazer.getControls()
+```
+#### Goals
+(API Reference)
+```js
+const { Radius, RadiusCB, Avoid, AvoidCB } = require("mineflayer-trailblazer").goals
+
+new Radius(destination, radius)
+
+new RadiusCB(callback, radius)
+
+new Avoid(position, distance)
+
+new AvoidCB(callback, distance)
+```
+(Static goals)
+- Static goals only set a position once and don't update dynamically (unless using a tick/loop approach)
+```js
+const { Radius } = require("mineflayer-trailblazer").goals
+
+bot.once("spawn", async function init() {
+  const entity = bot.nearestEntity(entity => entity.type === "player")
+  const goal = new Radius(entity.position) // entity.position will not update if the entity moves somewhere else
+  await bot.trailblazer.goto(goal)
+})
+```
+(Dynamic goals)
+- Dynamic goals use a callback function to query a position, allowing it to change during operation
+```js
+const { RadiusCB } = require("mineflayer-trailblazer").goals
+
+bot.once("spawn", async function init() {
+  const entity = bot.nearestEntity(entity => entity.type === "player")
+  const goal = new RadiusCB(() => entity.position) // callback will return the active position
+  await bot.trailblazer.goto(goal)
+})
+```
+#### Hazards
+#### Configuration
+#### Examples
 ```js
 const mineflayer = require("mineflayer")
 const trailblazer = require("trailblazer").plugin
