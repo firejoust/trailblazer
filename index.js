@@ -1,8 +1,8 @@
-const Goals = require("./src/goals")
+const Goals = require("./src/pathfinder/goals")
 
-const Movement = require("./src/components/movement")
-const Pathfinder = require("./src/components/pathfinder")
-const Traversal = require("./src/components/traversal")
+const Movement = require("./src/movement")
+const Pathfinder = require("./src/pathfinder")
+const Traversal = require("./src/traversal")
 
 const Assert = require("assert")
 
