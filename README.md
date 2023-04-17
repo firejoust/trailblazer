@@ -11,6 +11,22 @@ npm install trailblazer
 ```
 ### API
 #### Methods
+(API Reference)
+```js
+bot.trailblazer.goto(goal, ...hazards?)
+
+bot.trailblazer.setGoal(goal, ...hazards?)
+
+bot.trailblazer.tick()
+
+bot.trailblazer.stop(reason?)
+
+bot.trailblazer.getYaw()
+
+bot.trailblazer.getControls()
+
+bot.trailblazer.configure(category)
+```
 (Getting from A to B)
 - Promise based approach: (example)
 ```js
@@ -25,14 +41,6 @@ bot.on("physicsTick", function tick() {
   bot.trailblazer.setGoal(goal, ...hazards?)
   bot.trailblazer.tick()
 })
-```
-(Miscellaneous)
-```js
-bot.trailblazer.stop(reason?)
-
-bot.trailblazer.getYaw()
-
-bot.trailblazer.getControls()
 ```
 #### Goals
 (API Reference)
@@ -65,12 +73,55 @@ const { RadiusCB } = require("mineflayer-trailblazer").goals
 
 bot.once("spawn", async function init() {
   const entity = bot.nearestEntity(entity => entity.type === "player")
-  const goal = new RadiusCB(() => entity.position) // callback will return the active position
+  const goal = new RadiusCB(() => entity.position) // callback will always return the updated position
   await bot.trailblazer.goto(goal)
 })
 ```
 #### Hazards
+- Hazards change the cost of travelling to a node if certain conditions are met.
+- All hazards have `weight`, which acts as a final multplier on the cost by `1 + weight`
+- An instance of a hazard can be updated dynamically using Setters (see below)
+
+(API Reference)
+```js
+const { Block, Entity, Position } = require("mineflayer-trailblazer").hazards
+
+new Block(bot, weight?, offset?, avoid?)
+  .weight(number)
+  .offset(Vec3)
+  .avoid(Object)
+
+new Entity(weight?, radius?, entities?)
+  .weight(number)
+  .radius(number)
+  .entities(Entity[])
+
+new Position(weight?, radius?, coordinates?)
+  .weight(number)
+  .radius(number)
+  .coordinates(Vec3[])
+```
 #### Configuration
+(Movement)
+```js
+bot.trailblazer.configure('movement')
+  .jumpSprint(boolean)
+  .fov(number)
+  .rotations(number)
+  .blend(number)
+  .goalHeadless(MovementGoal)
+  .goalGround(MovementGoal)
+  .goalAirborne(MovementGoal)
+  .goalSwimming(MovementGoal)
+  .goalClimbing(MovementGoal)
+```
+(Pathfinder)
+```js
+
+```
+(Traversal)
+```js
+```
 #### Examples
 ```js
 const mineflayer = require("mineflayer")
