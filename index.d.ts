@@ -7,17 +7,25 @@ type MovementGoal = Heuristics.Goal
 
 export function plugin(bot: Bot): void
 
-declare interface Goal {
-    destination: () => Vec3 | null,
-    heuristic: (position: Vec3) => number,
+declare class Goal {
+    destination: () => Vec3 | null
+    heuristic: (position: Vec3) => number
     complete: (position: Vec3) => boolean
 }
 
-export interface goals {
-    Radius: (destination: Vec3, radius?: number) => Goal
-    RadiusCB: (callback: () => Vec3, radius?: number) => Goal
-    Avoid: (position: Vec3, distance?: number) => Goal
-    AvoidCB: (callback: () => Vec3, distance?: number) => Goal 
+export namespace goals {
+    class Radius extends Goal {
+        constructor(destination: Vec3, radius?: number)
+    }
+    class RadiusCB extends Goal {
+        constructor(callback: () => Vec3, radius?: number)
+    }
+    class Avoid extends Goal {
+        constructor(position: Vec3, distance?: number)
+    }
+    class AvoidCB extends Goal {
+        constructor(callback: () => Vec3, distance?: number)
+    }
 }
 
 type Hazard = hazards.Block | hazards.Entity | hazards.Position
@@ -75,7 +83,7 @@ declare interface Plugin {
     getControls: () => ControlStateStatus
 }
 
-export module "mineflayer" {
+declare module "mineflayer" {
     interface Bot {
         trailblazer: Plugin
     }
