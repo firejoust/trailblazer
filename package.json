@@ -9,8 +9,8 @@
     "vec3": "^0.1.8"
   },
   "types": "./index.d.ts",
-  "name": "trailblazer",
-  "description": "- Smooth movement towards a goal using A* and steering - Automatically changes movement behaviour based on the terrain - Avoid hazards such as blocks, entities and coordinates",
+  "name": "mineflayer-trailblazer",
+  "description": "Dynamic terrain navigation plugin for mineflayer",
   "version": "0.0.1",
   "main": "index.js",
   "scripts": {
