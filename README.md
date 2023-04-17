@@ -13,18 +13,25 @@ npm install mineflayer-trailblazer
 #### Methods
 (API Reference)
 ```js
+// returns a promise; resolves when the goal is complete, rejects if it is stopped midway
 bot.trailblazer.goto(goal, ...hazards?)
 
+// only for tick function; sets the goal and hazards to avoid internally.
 bot.trailblazer.setGoal(goal, ...hazards?)
 
+// applies a tick of movement, updating the path, changing control states and yaw, etc.
 bot.trailblazer.tick()
 
+// stops all ongoing movement operations and clears control states (note this will reject the goto promise)
 bot.trailblazer.stop(reason?)
 
+// applies a tick of movement, but only returns the yaw.
 bot.trailblazer.getYaw()
 
-bot.trailblazer.getControls()
+// returns the control states required to move towards the yaw value
+bot.trailblazer.getControls(yaw)
 
+// configures one of the three navigation modules (see configuration below)
 bot.trailblazer.configure(category)
 ```
 (Getting from A to B)
@@ -47,12 +54,16 @@ bot.on("physicsTick", function tick() {
 ```js
 const { Radius, RadiusCB, Avoid, AvoidCB } = require("mineflayer-trailblazer").goals
 
+// complete when within a certain radius of a static position
 new Radius(destination, radius)
 
+// complete when within a certain radius of a dynamic position (returned by the callback)
 new RadiusCB(callback, radius)
 
+// complete when a certain distance away from a position
 new Avoid(position, distance)
 
+// complete when a certain distance away from a changing position (returned by the callback)
 new AvoidCB(callback, distance)
 ```
 (Static goals)
@@ -86,16 +97,19 @@ bot.once("spawn", async function init() {
 ```js
 const { Block, Entity, Position } = require("mineflayer-trailblazer").hazards
 
+// applies weight from certain blocks at an offset to the current node
 new Block(bot, weight?, offset?, avoid?)
   .weight(number)
   .offset(Vec3)
-  .avoid(Object)
+  .avoid(Object) // key/value object mapping block name (string) to boolean
 
+// applies weight to nodes within a radius of the specified entities
 new Entity(weight?, radius?, entities?)
   .weight(number)
   .radius(number)
   .entities(Entity[])
 
+// applies weight to nodes within a radius of the coordinates specified
 new Position(weight?, radius?, coordinates?)
   .weight(number)
   .radius(number)
@@ -116,35 +130,35 @@ const instance = bot.trailblazer.configure('movement' | 'pathfinder' | 'traversa
 - Refer to [mineflayer-movement](https://github.com/firejoust/mineflayer-movement) README for more information
 ```js
 bot.trailblazer.configure('movement')
-  .jumpSprint(boolean)
-  .fov(number)
-  .rotations(number)
-  .blend(number)
-  .goalHeadless(MovementGoal)
-  .goalGround(MovementGoal)
-  .goalAirborne(MovementGoal)
-  .goalSwimming(MovementGoal)
-  .goalClimbing(MovementGoal)
+  .jumpSprint(boolean) // whether to always jump regardless
+  .fov(number) // frame of vision used for movement
+  .rotations(number) // total rotations used for movement
+  .blend(number) // blend used for movement
+  .goalHeadless(MovementGoal) // used instead of pathfinding if the path is too small
+  .goalGround(MovementGoal) // following a path, on the ground
+  .goalAirborne(MovementGoal) // following a path, jumping/falling
+  .goalSwimming(MovementGoal) // not following a path, in water
+  .goalClimbing(MovementGoal) // following a path, climbing up blocks
 ```
 (Pathfinder)
 - Configures the path that the player will take to get to the destination
 - Refer to [mineflayer-pathfinder-lite](https://github.com/firejoust/mineflayer-pathfinder-lite) README for more information
 ```js
 bot.trailblazer.configure('pathfinder')
-  .avoid(Object)
-  .depth(number)
-  .blocks(number)
-  .timeout(number)
-  .minimumNodes(number)
+  .avoid(Object) // key/value object mapping block name (string) to boolean
+  .depth(number) // maximum depth the pathfinder can descend blocks
+  .blocks(number) // how many blocks to check, maximum
+  .timeout(number) // how many miliseconds to find a path, maximum
+  .minimumNodes(number) // the minimum nodes a path can have before switching to headless mode
 ```
 (Traversal)
 - Modifies the requirements needed to get to the next node
 ```js
 bot.trailblazer.configure('traversal')
-  .prevision(number)
-  .radiusXZ(number)
-  .radiusAscent(number)
-  .radiusDescent(number)
+  .prevision(number) // how many nodes to look ahead
+  .radiusXZ(number) // how far within horizontal distance of a node
+  .radiusAscent(number) // how far within vertical distance of a node whilst climbing up
+  .radiusDescent(number) // how far within vertical distance of a node whilst descending
 ```
 #### Examples
 ```js
