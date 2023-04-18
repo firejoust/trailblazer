@@ -17,16 +17,27 @@ module.exports.plugin = function inject(bot) {
     const movement = require("mineflayer-movement").plugin
     const pathfinder = require("mineflayer-pathfinder-lite").plugin
     const physics = require("mineflayer-physics").plugin
-
-    bot.loadPlugin(movement)
-    bot.loadPlugin(pathfinder)
     bot.loadPlugin(physics)
+
+    // save an instance of the old plugins (if they exist)
+    bot._pathfinder_old = bot.pathfinder
+    bot._movement_old = bot.movement
+
+    // load the new plugins
+    bot.loadPlugin(pathfinder)
+    bot.loadPlugin(movement)
     
-    // avoid plugin conflicts (load implicitly)
+    // store the new plugin variables internally
     bot._pathfinder = bot.pathfinder
     bot._movement = bot.movement
-    delete bot.pathfinder
-    delete bot.movement
+    
+    // restore the original plugins
+    bot.pathfinder = bot._pathfinder_old
+    bot.movement = bot._movement_old
+
+    // remove the temporary instance
+    delete bot._pathfinder_old
+    delete bot._movement_old
 
     bot.trailblazer = new Plugin(bot)
 }
