@@ -11,7 +11,7 @@
   "types": "./index.d.ts",
   "name": "mineflayer-trailblazer",
   "description": "Dynamic terrain navigation plugin for mineflayer",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
